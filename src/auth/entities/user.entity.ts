@@ -13,4 +13,10 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  resetToken: string | null;
+
+  @Column({ type: 'datetime', nullable: true })
+  resetTokenExpires: Date | null;
 }
