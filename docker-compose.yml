@@ -1,0 +1,37 @@
+services:
+  #nama services container database
+  mysql-db:
+    image: mysql:8
+    container_name: harkat_mysql_container
+    restart: always
+    environment:
+      #password untuk user root
+      MYSQL_ROOT_PASSWORD: supersecretpassword
+      #nama database yang otomatis dibuat (sesuai entity dosen)
+      MYSQL_DATABASE: db_auth
+    ports:
+      #FORMATNYA PortKomputerKalian:PortServiceContainer
+      #pakai 3307 supaya tidak bentrok dengan MySQL XAMPP (3306)
+      - "3307:3306"
+    volumes:
+      #menyimpan data database
+      - mysql_data_volume:/var/lib/mysql
+
+  #services lainnya: phpMyAdmin untuk melihat isi database lewat browser
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: harkat_phpmyadmin
+    restart: always
+    environment:
+      #nama service database di atas, bukan localhost
+      PMA_HOST: mysql-db
+      PMA_USER: root
+      PMA_PASSWORD: supersecretpassword
+    ports:
+      #buka di browser: http://localhost:8080
+      - "8080:80"
+    depends_on:
+      - mysql-db
+
+volumes:
+  mysql_data_volume:
