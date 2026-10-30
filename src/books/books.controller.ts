@@ -16,7 +16,7 @@ export class BooksController {
     //TAMBAHAN: menampilkan satu data berdasarkan ID
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.booksService.findOne(Number(id));
+        return this.booksService.findOne(id);
     }
 
     //menyimpan data 
@@ -25,19 +25,16 @@ export class BooksController {
         return this.booksService.simpanData(createBookDto);
     }
 
-    // //mengupdate data
-    // @Put(':id')
-    // updateData(
-    //     @Param('id') id: string,@Body() createBookDto: CreateBookDto) {
-    //     return this.booksService.updateData(Number(id), createBookDto);
-    // }
+    //mengupdate data
+    @Put(':id')
+    updateData(
+        @Param('id') id: string,@Body() createBookDto: CreateBookDto) {
+        return this.booksService.updateData(id, createBookDto);
+    }
 
-    // //menghapus data
-    // @Delete(':id')
-    // hapusdata(
-    //     @Param('id') id:string,
-    //     @Body() createBookDto: CreateBookDto) {
-    //     return this.booksService.hapusData(Number(id), createBookDto);
-    // }
-
+    //menghapus data
+    @Delete(':id')
+    hapusdata(@Param('id') id: string) {
+        return this.booksService.deleteData(id);
+    }
 }

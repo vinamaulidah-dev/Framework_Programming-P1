@@ -6,9 +6,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class BooksService {
-    findOne(arg0: number) {
-        throw new Error('Method not implemented.');
-    }
     //fungsi untuk akses ke database
     constructor(
         @InjectRepository(Book)
@@ -29,6 +26,38 @@ export class BooksService {
 
         return await this.bookRepository.save(newBook);
     }
+    // menampilkan data berdasarkan id
+    async findOne(id:string): Promise<Book>{
+        //cari buku berdasarkan id
+        const book = await this.bookRepository.findOneBy({id})
 
+        //jika tidak ada
+        if(!book){
+            throw new NotFoundException (`Buku ${id} tidak di temukan`)
+        }
+        //jika data buku di temukan
+        return book
+    }
+    //update data
+    async updateData(id:string, createBookDto: CreateBookDto): Promise<Book>{
+        const book = await this.findOne(id)
+        
+        //gabunkan perubhannya
+        const updatedBook = this.bookRepository.merge(book, createBookDto)
 
+        //simpan / update data
+        return await this.bookRepository.save(updatedBook)
+    }
+
+    //menghapus data
+    async deleteData(id: string): Promise<{message: string, deletedId: string}>{
+        await this.findOne(id)
+
+        await this.bookRepository.softDelete(id)
+
+        return {
+            message: `Buku ${id} berhasil dihapus`,
+            deletedId: id
+        }
+    }
 }
